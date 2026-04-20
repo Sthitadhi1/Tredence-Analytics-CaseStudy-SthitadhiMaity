@@ -126,7 +126,6 @@ The histogram of gate values for the best model showed:
 
 This confirms that the network successfully learned to prune itself during training.
 
-![Gate Distribution](gate_distribution_best_model.png)
 
 ---
 
