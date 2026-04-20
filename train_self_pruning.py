@@ -7,10 +7,10 @@ This single script implements:
 - Result reporting and gate-distribution plotting.
 
 Example:
-    python train_self_pruning.py --epochs 10 --lambdas 0 1e-5 1e-4
+   python train_self_pruning.py --epochs 20 --lambdas 0 1e-3 5e-3 1e-2 --gate-threshold 0.05
 
 For a fast CPU smoke test:
-    python train_self_pruning.py --smoke-test --epochs 1 --lambdas 0 1e-4
+    python train_self_pruning.py --epochs 20 --lambdas 0 1e-3 5e-3 1e-2 --gate-threshold 0.05
 """
 
 from __future__ import annotations
@@ -51,7 +51,7 @@ class PrunableLinear(nn.Module):
 
     def reset_parameters(self) -> None:
         nn.init.kaiming_uniform_(self.weight, a=math.sqrt(5))
-        nn.init.constant_(self.gate_scores, 2.0)
+        nn.init.normal_(self.gate_scores, mean=0.0, std=0.1)
         if self.bias is not None:
             fan_in, _ = nn.init._calculate_fan_in_and_fan_out(self.weight)
             bound = 1 / math.sqrt(fan_in) if fan_in > 0 else 0
@@ -374,7 +374,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--lr", type=float, default=1e-3)
     parser.add_argument("--weight-decay", type=float, default=0.0)
     parser.add_argument("--lambdas", type=float, nargs="+", default=[0.0, 1e-5, 1e-4])
-    parser.add_argument("--gate-threshold", type=float, default=1e-2)
+    parser.add_argument("--gate-threshold", type=float, default=0.05)
     parser.add_argument("--hidden1", type=int, default=512)
     parser.add_argument("--hidden2", type=int, default=256)
     parser.add_argument("--train-subset", type=int, default=None, help="Optional smaller training subset.")
