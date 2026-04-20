@@ -138,4 +138,3 @@ The custom `PrunableLinear` layer correctly implemented learnable gates, the spa
 Among all tested values, `lambda = 0.001` provided the best balance between predictive performance and pruning efficiency.
 
 ```
-```
